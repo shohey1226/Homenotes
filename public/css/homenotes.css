@@ -1,0 +1,145 @@
+img.bg {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1000px;
+	
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+	
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+@media screen and (max-width: 1000px) { /* Specific to this particular image */
+  img.bg {
+    left: 50%;
+    margin-left: -512px;   /* 50% */
+  }
+}
+
+div.whole {
+    position: relative;
+}
+
+#view .span6 a:link{
+    color: #555555;
+    text-decoration: underline; 
+}
+
+#view .span6 a:visited {
+    color: #000000;
+    text-decoration: underline; 
+}
+
+#view .span4 a:visited {
+    color: #000000;
+    text-decoration: underline; 
+}
+
+#view .span4 a:link {
+    color: #000000;
+    text-decoration: underline; 
+}
+
+#page_info h1 {
+    font-size: 60px;
+}
+
+.pull-right li a:link,a:visited {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#loginas {
+    font-size: 10px;
+    color: gray;
+}
+
+#page_info {
+    width: 600px;
+    color: white;
+    margin-top: 30px; 
+    margin-bottom:30px;
+    font-size:18px;
+    font-weight:200;
+    line-height:30px;
+    background-color:transparent;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:left;
+}
+
+#page_info h4 a:visited,a:link {
+    color: #009900;
+    font-size: 24px;
+    text-decoration: underline; 
+}
+
+#central_share_button {
+    color: white;
+    text-decoration: none; 
+}
+
+.row-search {
+  line-height: 2em;
+  color: white;
+  padding-top: 5px;
+  text-align: center;
+  height: 75px;
+}
+
+#view p {
+    text-align: left;
+}
+
+.know {
+  font-size: 18px;
+  padding-left: 30px;
+  line-height: 1.5em;
+}
+
+.know pre code {
+  font-size: 12px;
+}
+
+.how {
+  font-size: 18px;
+  padding-left: 30px;
+  line-height: 1.5em;
+}
+
+.example {
+  font-size: 12px;
+  padding-left: 30px;
+  line-height: 1.5em;
+}
+
+.footer {
+  text-align: center;
+  color: white;
+}
+
+.input-size {
+    width: 500px;
+    font-size: 12px;
+    height: 20px;
+    resize: none;
+}
+
+.example-size {
+    width: 500px;
+    font-size: 12px;
+    resize: none;
+}
+
+.search-form {
+    margin-bottom: 20px;
+}
+
+#share_button {   
+    text-align: center;
+}
+

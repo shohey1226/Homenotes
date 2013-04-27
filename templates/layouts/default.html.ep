@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/homenotes.css" type="text/css" />
+    <script type="text/javascript" src="/js/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/backbone-min.js"></script>
+    <script type="text/javascript" src="/js/homenotes.js"></script>
+  </head>
+    <body>
+      <img src="/img/rainbow.jpg" class="bg">
+      <div class="whole">
+        <div class="navbar navbar-static-top">
+          <div class="navbar-inner">
+            <ul class="nav pull-left">
+              <li><a class="brand" href="/">$HOME/notes</a>
+              <li class="navbar-text"><small>Know, How and Example. Just 3 simple knowledge base</small> 
+            </ul>
+            <ul class="nav pull-right">
+              <%== $navbar_right %>
+            </ul>
+          </div>
+        </div>
+        <%= content %>
+      </div>
+    </body>
+</html>
+

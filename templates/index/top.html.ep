@@ -1,0 +1,90 @@
+% layout 'default';
+% title '$HOME/notes - Know, How and Example. 3 simple knowledge base';
+<div class="contents">
+    <div class="row-search">
+        <div class="row row-fluid">
+            <div class="span12 search-form">
+                <div class="form-inline">
+                    <label class="checkbox">
+                        <input name="check" value="know" type="checkbox" checked><small> in Know </small>
+                    </label>
+                    <label class="checkbox">
+                        <input name="check" value="how" type="checkbox"><small> in How </small> 
+                    </label>
+                    <label class="checkbox">
+                        <input name="check" value="example" type="checkbox"><small> in Example </small> 
+                    </label>
+                    <br>
+                    <div class="input-append">
+                        <input id="search_text" type="text">
+                        <button id="search" class="btn" type="submit">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page_info">
+        <h1> $HOME/notes </h1>
+        <p> 
+        This is a knowledge base which stores limited number of characters.<br>
+        Simply dividing into 3 categories - Know, How and Example. <br>
+        <br>
+        <%== $share_button %>
+        </p>
+        <!-- Button to trigger modal or share knowledge button -->
+    </div>
+    <div class="container"> 
+    <div id="view">
+        <div class="row pagination-centered">
+            <div class="span4">
+                <h2>Get the point <i class="icon-lightbulb"></i></h2>
+              <p>Knowhow is stored as three simple catetories, know, how and example. And each has limited number of characters. 
+                 For this, the contents can become easily to read, understand and more importantly you can find the one you want.
+              </p>
+            </div>
+            <div class="span4">
+              <h2>Find knowhow <i class="icon-search"></i> </h2>
+              <p>You can find the knowhow by the category. <a href="/taglist">#tag</a> also can be used. If you add '@name' in search text, the knowhow owned by him/her shows up.
+                 After logging in, you can add knowhow. Share your knowhow and make people's life easy :)
+              </p>
+            </div>
+            <div class="span4">
+                <h2>Stock knowhow <i class="icon-share"></i></h2>
+              <p>Once you logged in, you can add other's knowhow into yours so that it becomes your knowhow. 
+                 You will search it easily with '@twitter_screenname" next time. 
+              </p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        </div>
+        <div class="modal-body">
+            <h3>Know <span class="count" id="know_count"></span> </h3>
+            <textarea class="input-size" row="1" id="know"></textarea> 
+            <br>            
+            <h3>How <span class="count" id="how_count"></span></h3>
+            <textarea class="input-size" row="1" id="how"></textarea> 
+            <h3>Example <span class="count" id="example_count"></span></h3>
+            <textarea class="example-size" id="example" rows="5"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button id="submit" class="btn btn-warning">Submit your knowhow!</button>
+        </div>
+    </div>
+    <!-- END OF Modal -->
+
+    <br>
+    <div class="footer">
+    <p>&copy; iworld designer 2013</p>
+    </div>
+
+</div>
+
+
