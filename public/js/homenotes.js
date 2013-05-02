@@ -1,11 +1,34 @@
 (function(){
 
+    //=========================================================================
     // To avoid the conflict with Mojolicious's template
-    _.templateSettings = {
-        evaluate: /\{\{([\s\S]+?)\}\}/g,
-        interpolate: /\{\{=([\s\S]+?)\}\}/g
-    };
+    //=========================================================================
+    // _.templateSettings = {
+    //     evaluate: /\{\{([\s\S]+?)\}\}/g,
+    //     interpolate: /\{\{=([\s\S]+?)\}\}/g
+    // };
 
+    //=========================================================================
+    // To submit knowhow 
+    //=========================================================================
+    // knowhow model for submittion
+    var Knowhow = Backbone.Model.extend({
+        url: '/submit',
+        defaults: {
+            know : '',
+            how : '',
+            example : ''
+        },
+        validate: function(attrs){
+            if (attrs.know.length > 80 || attrs.how.length > 80 || attrs.example.length > 500 ){ 
+                return "Over maximum words. Please get point and submit";
+            } else if(attrs.know.length == 0 || attrs.how.length == 0 || attrs.example.length == 0){
+                return "It has empty content. Please put some";
+            }
+        }
+    });
+
+    // String counters on submit modal 
     var CountersView = Backbone.View.extend({
         tagName: 'span',
         className: 'count',
@@ -37,33 +60,16 @@
             }
         }
     });
-        
-    Counters = Backbone.Collection.extend();
+
+    // Counter instance with Knowhow model    
+    Counters = Backbone.Collection.extend({model: Knowhow});
     counters = new Counters([ 
         {name: 'know', counter:0, max: 80},
         {name: 'how', counter:0, max: 80},
         {name: 'example', counter:0, max: 500},
     ]);
-    coutersview = new CountersView({collection: counters});
 
-
-    var Knowhow = Backbone.Model.extend({
-        url: '/submit',
-        defaults: {
-            know : '',
-            how : '',
-            example : ''
-        },
-        validate: function(attrs){
-            if (attrs.know.length > 80 || attrs.how.length > 80 || attrs.example.length > 500 ){ 
-                return "Over maximum words. Please get point and submit";
-            } else if(attrs.know.length == 0 || attrs.how.length == 0 || attrs.example.length == 0){
-                return "It has empty content. Please put some";
-            }
-        }
-    });
-
-    // This handles sumbittion of knowhow
+    // View for sumbittion of knowhow
     var ModalFooterView = Backbone.View.extend({
         tagName: 'div',
         className: 'modal-footer',
@@ -83,7 +89,8 @@
                             alert("Failed to insert. Please contact admin");
                         }else {
                             alert("Thank you for sharing with us!");
-                            location.href = "/knowhow/" + response;
+                            location.href = "/knowhow/view/" + response;
+                            //router.navigate("/knowhow/view/" + response);
                         }
                     }
                 }
@@ -96,12 +103,55 @@
         }
     });
 
-    var knowhow = new Knowhow();
+    var knowhow = new Knowhow(); // for submition
+    coutersview = new CountersView({collection: counters});
     knowhow.on("invalid", function(model, error) { alert(error) }); // handles validation
     var modalfooter = new ModalFooterView({model: knowhow});
     $('#myModal').append(modalfooter.render().el);
 
+    //=========================================================================
+    // To show knowhow 
+    //=========================================================================
+    var KnowhowResult = Backbone.Model.extend({
+        urlRoot: '/knowhow'
+    });
+    var KnowhowResultView = Backbone.View.extend({
+        template: _.template("<h2>KNOW</h2><pre><code><%- know %></code></pre><h2>HOW</h2><h2>EXAMPLE</h2>"),
+        render: function(){
+            var html = this.template(this.model.toJSON());
+            console.log(html);
+            $('#view').html(html);
+        }
+    });
     
+    
+    //=========================================================================
+    // Router 
+    //=========================================================================
+    var HomenotesRouter = Backbone.Router.extend({
+        routes: {
+            "knowhow/view/:id": "knowhow",
+            "": 'top',
+        },
+        "knowhow": function(id){
+            alert(id);
+            var knowhow = new KnowhowResult({id : id});
+            knowhow.fetch({
+                success: function(res) {
+                    console.log(knowhow.toJSON());
+                    var knowhowview = new KnowhowResultView({model: knowhow});
+                    knowhowview.render();
+                }
+            });
+
+        },
+        'top': function(id){
+            console.log('top');
+        }
+    }); 
+    var router = new HomenotesRouter();
+    Backbone.history.start({ pushState: true });
+
 
         
 })();
