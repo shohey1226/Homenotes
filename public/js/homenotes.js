@@ -110,6 +110,63 @@
     $('#myModal').append(modalfooter.render().el);
 
     //=========================================================================
+    // Handle Knowhow
+    //=========================================================================
+    // Delete my knowhow
+    var DeleteModel = Backbone.Model.extend({
+        urlRoot: '/knowhow/delete'
+    });
+    var DeleteView = Backbone.View.extend({
+        events: {
+            'click': function(){
+                window.confirm('Are you sure to delete this knowhow?');
+                this.model.destroy({ 
+                    success : function(model, res) {
+                        alert(res.result);       
+                        router.navigate("", { trigger: true});
+                    }
+                });
+             }
+        }
+    });
+
+    var AddModel = Backbone.Model.extend({
+        urlRoot: '/knowhow/add'
+    });
+    var AddView = Backbone.View.extend({
+        events: {
+            'click': function(){
+                this.model.save(
+                    {
+                        id: this.model.get('id')
+                    }, 
+                    {
+                        success: function(model, res) {
+                            alert(res.result);
+                            window.location.reload();
+                    }
+                });
+            }
+        }
+    });
+
+    var RemoveModel = Backbone.Model.extend({
+        urlRoot: '/knowhow/remove'
+    });
+    var RemoveView = Backbone.View.extend({
+        events: {
+            'click': function(){
+                this.model.destroy({ 
+                    success : function(model, res) {
+                        alert(res.result);       
+                        window.location.reload();
+                    }
+                });
+             }
+        }
+    });
+
+    //=========================================================================
     // Show knowhow 
     //=========================================================================
     var KnowhowResult = Backbone.Model.extend({
@@ -120,8 +177,50 @@
             + "<h2>HOW</h2><pre><code><%- how %></code></pre>" 
             + "<h2>EXAMPLE</h2><pre><code><%- example %></code></pre>"),
         render: function(){
+            console.log(this.model.toJSON());
             var html = this.template(this.model.toJSON());
             $('#view').html(html);
+        }
+    });
+
+    var StatusModel = Backbone.Model.extend({
+        urlRoot: '/status'
+    });
+
+    // Show buttons ( add/delete/share ) 
+    var ButtonView = Backbone.View.extend({
+        el: $('#buttons'),
+        render: function(){
+            if (this.model.get('login') === 'true') {
+                var belongings = this.model.get('knowhow'); 
+                var id = this.model.get('id');
+
+                // Create HTML
+                var html = '<br><div class="buttons">';
+                if ( belongings  === 'mine'){ 
+                    html += '<button id="delete" class="btn btn-danger btn-large" value="' + id +  '">Delete this knowhow</button>';
+                }else if( belongings === 'added' ) {
+                    html += '<button id="remove_knowhow" class="btn btn-warning btn-large" value="' + id + '">Remove this from my knowhow</button>';
+                }else {
+                    html += '<button id="add_knowhow" class="btn btn-info btn-large" value="' + id + '">Add this to my knowhow</button>';
+                }
+                html += '<br><br><a id="central_share_button" href="#myModal" role="button" class="btn btn-large btn-success" data-toggle="modal">Share your knowhow!</a>';
+                html += '</div>';
+                this.$el.html(html);
+
+                // Add events
+                if ( belongings  === 'mine'){ 
+                    new DeleteView({el: $('button#delete'), model: new DeleteModel({id: id}) });
+                } else if ( belongings == 'added' ) {
+                    new RemoveView({el: $('button#remove_knowhow'), model: new RemoveModel({id: id}) });
+                } else {
+                    new AddView({el: $('button#add_knowhow'), model: new AddModel({id : id}) });
+                }
+            }else {
+                this.$el.html('<br><h4>Login with <a href="/auth/twitter/authenticate"><img src="/img/twitter_32.png">Twitter</a> or ' 
+                + '<a href="/auth/github/authenticate"><img src="/img/github_32.png">Github</a> to share your notes!</h4>');
+            }
+
         }
     });
 
@@ -134,7 +233,16 @@
                 knowhowview.render();
             }
         });
+        var status = new StatusModel({id: id});
+        status.fetch({
+            success: function(model) {
+                var buttonview = new ButtonView({model: model});
+                buttonview.render();
+            }
+        });
     }
+
+
 
     //=========================================================================
     // Search
@@ -151,7 +259,7 @@
             _.bindAll(this, 'render');
         },
         events: {
-            'click' : 'click_search',
+            'click' : 'click_search'
         },
         click_search: function(e) { 
             var search = {}
@@ -185,7 +293,7 @@
             console.log(res);
             result += '<div class="span3"></div><div class="span6">';
             if (res === "" ){
-                result += "<center><strong>No Search Result</strong></center><br><br><br>";
+                result += "<center><h1>No Search Result</h1></center><br><br><br>";
             }else {
                 for (var i in res ){
                   result += '<a class="searchresult" href="/knowhow/view/' + i + '" >' + res[i] + '</a><hr>';
@@ -193,6 +301,7 @@
             }
             result += '</div><div class="span3"></div>';
             $("#page_info").html('');
+            $("#buttons").html('');
             $("#view").html(result);
         }
 
