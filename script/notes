@@ -1,0 +1,97 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Data::Dumper;
+use LWP::Simple;
+use Getopt::Long;
+use Pod::Usage;
+use URI::Escape;
+use JSON;
+
+# variables
+my $help=undef;;
+my $id=undef;
+my $query=undef;
+my $know=undef;
+my $how=undef;
+my $example=undef;
+my $url = 'http://127.0.0.1:3000';
+
+my $options = GetOptions(
+    'help' => \$help,
+    'query=s' => \$query,
+    'know' => \$know,
+    'how' => \$how,
+    'example' => \$example,
+    'id=s' => \$id,
+);
+
+if ( defined $help || (! defined $id && ! defined $query) ) {
+  pod2usage();
+}
+
+# if id is defined, regarded as query to get a knowhow
+if (defined $id) {
+    my $content = get("$url/knowhow/$id");
+    my $ref = decode_json $content; 
+    print "KNOW:\n";
+    print $ref->{know}, "\n\n";
+    print "HOW:\n";
+    print $ref->{how}, "\n\n";
+    print "EXAPLE:\n";
+    print $ref->{example}, "\n";
+# otherwise, it's query
+}else {
+    my $esc_query = uri_escape( $query );
+    my $qknow = defined $know ? 1 : 0;
+    my $qhow = defined $how ? 1 : 0;
+    my $qexample = defined $example ? 1 : 0;
+    $qknow = 1 if ($qknow == 0 && $qhow == 0 && $qexample == 0);
+    my $content = get("$url/search?query=$esc_query&know=$qknow&how=$qhow&example=$qexample");
+    my $ref = decode_json $content; 
+    for my $id (sort {$a <=> $b}  keys %{ $ref }) {
+        print "$id : $ref->{$id}\n";
+    }
+}
+
+__END__
+
+=head1 NAME
+
+notes - Get knowhow $HOME/notes 
+
+=head1 SYNOPSIS
+
+    # Get indices of search
+    $ notes -query <key> 
+    
+    # Get content of knowhow by the index
+    $ notes -id <id> 
+
+ Options:
+   -help            brief help message
+   -query           search query
+   -know            search in know
+   -how             search in how
+   -example         seach in example
+   -id              knowhow index which you can obtain the query 
+
+=head1 OPTIONS
+
+=over 8 
+
+=item B<-help>
+
+Print a brief help message and exits..
+
+=back
+
+=head1 DESCRIPTION
+
+aaa
+
+=cut
+
+
+
