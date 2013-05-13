@@ -1,0 +1,9 @@
+{
+    twitter_consumer_key => 'xxx',
+    twitter_consumer_secret => 'yyy',
+    github_consumer_key => 'zzz',
+    github_consumer_secret => 'ooo',
+    db_dsn => 'dbi:mysql:homenotes',
+    db_username => 'ppp',
+    password => 'qqq',
+};
