@@ -20,12 +20,15 @@ img.bg {
   }
 }
 
+a:visited {
+    color: #040404;
+}
+
 div.whole {
     position: relative;
 }
 
 #view .span6 a:link{
-    color: #555555;
     text-decoration: underline; 
 }
 
@@ -52,6 +55,9 @@ div.whole {
     font-size: 15px;
     font-weight: bold;
 }
+.nav .brand {
+    font-weight: bold
+}
 
 #loginas {
     font-size: 10px;
@@ -72,8 +78,20 @@ div.whole {
     text-align:left;
 }
 
+#feature {
+    width: 600px;
+    margin-top: 30px; 
+    margin-bottom:30px;
+    font-size:18px;
+    font-weight:200;
+    line-height:30px;
+    background-color:transparent;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:left;
+}
+
 #page_info h4 a:visited,a:link {
-    color: #009900;
     font-size: 24px;
     text-decoration: underline; 
 }
@@ -139,7 +157,7 @@ div.whole {
     margin-bottom: 20px;
 }
 
-#share_button {   
+.buttons {   
     text-align: center;
 }
 

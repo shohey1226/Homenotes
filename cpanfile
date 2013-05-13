@@ -1,0 +1,11 @@
+requires 'Mojolicious', 3.97;
+requires 'Plack', 1.0023;
+requires 'Plack::Middleware::Session', 0.18;
+requires 'Moo', 1.001000;
+requires 'DBIx::Skinny', 0.0742;
+requires 'DBD::mysql', 4.022;
+requires 'LWP::Protocol::Net::Curl', 0.011;
+requires 'YAML', 0.84;
+requires 'XML::Simple', 2.20;
+requires 'Cache::Memcached::Fast', 0.19;
+requires 'Mojolicious::Plugin::Web::Auth', 0.02;

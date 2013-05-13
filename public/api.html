@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>$HOME/notes - Know, How and Example. 3 simple knowledge base</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/css/homenotes.css" type="text/css" />
+  </head>
+    <body>
+      <img src="/img/rainbow.jpg" class="bg">
+      <div class="whole">
+
+        <div class="navbar navbar-static-top">
+          <div class="navbar-inner">
+            <ul class="nav pull-left">
+              <li><a class="brand" href="/">$HOME/notes</a>
+              <li class="navbar-text"><small>Know, How and Example. Just 3 simple knowledge base</small> 
+            </ul>
+            <ul class="nav pull-right">
+              <li class='navbar-text'><span id='loginas'>Logged in as </span>shoheik@github</li><li><a href='/auth/logout'>Logout</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="contents">
+          <div class="container"> 
+            <div id="view">
+
+              <h1>API</h1>
+              
+              <h2>Get indices from search query</h2>
+              
+              <h3>URL</h3>
+              
+              <p>http://knowhow3.com/search</p>
+              
+              <h3>Method</h3>
+              
+              <p>GET</p>
+              
+              <h3>Parameters</h3>
+              
+              <table>
+              <colgroup>
+              <col style="text-align:left;"/>
+              <col style="text-align:center;"/>
+              </colgroup>
+              
+              <thead>
+              <tr>
+              	<th style="text-align:left;">Key</th>
+              	<th style="text-align:center;">Description</th>
+              </tr>
+              </thead>
+              
+              <tbody>
+              <tr>
+              	<td style="text-align:left;">query</td>
+              	<td style="text-align:center;">search query. URI enconding needs to be done on your end</td>
+              </tr>
+              <tr>
+              	<td style="text-align:left;">know</td>
+              	<td style="text-align:center;">0 or 1. When you want to search in know, then use 1</td>
+              </tr>
+              <tr>
+              	<td style="text-align:left;">how</td>
+              	<td style="text-align:center;">0 or 1. When you want to search in how, then use 1</td>
+              </tr>
+              <tr>
+              	<td style="text-align:left;">exmpale</td>
+              	<td style="text-align:center;">0 or 1. When you want to search in example, then use 1</td>
+              </tr>
+              </tbody>
+              </table>
+              <h3>Example</h3>
+              
+              <pre><code>$ curl http://knowhow3.com/search -X GET -d &quot;query=linux&quot; -d &quot;know=1&quot;
+              {&quot;6&quot;:&quot;The way to see memory usage with #linux command&quot;,&quot;32&quot;:&quot;How to add a user to group on #centos #linux&quot;,&quot;28&quot;:&quot;How to make user id to run sudo on CentOS #linux&quot;,&quot;21&quot;:&quot;How to obtain the number of files within XX days last modified #linux&quot;,&quot;7&quot;:&quot;change space with newline on #linux&quot;,&quot;17&quot;:&quot;Find the files which has a string, 'xxx',  on #linux&quot;,&quot;2&quot;:&quot;This is know2 #linux&quot;,&quot;20&quot;:&quot;How to check #linux performance&quot;,&quot;22&quot;:&quot;How to see binary with #linux command&quot;,&quot;18&quot;:&quot;Replace text1 to text2 on #linux&quot;,&quot;30&quot;:&quot;How to disable root login with #ssh #linux&quot;,&quot;24&quot;:&quot;How to use RCS on #linux&quot;,&quot;19&quot;:&quot;Get the common columns in two files on #linux&quot;,&quot;29&quot;:&quot;How to set default PATH of #sudo # linux&quot;}
+              </code></pre>
+              
+              <p>GET : http://knowhow3.com/search&amp;query=linux&amp;know=1&amp;how=0&amp;example=0</p>
+              
+              <hr />
+              
+              <h2>Get knowhow using ID</h2>
+              
+              <h3>URL</h3>
+              
+              <p>http://knowhow3.com/knowhow/:id</p>
+              
+              <h3>Method</h3>
+              
+              <p>GET</p>
+              
+              <h3>Example</h3>
+              
+              <pre><code>$ curl http://knowhow3.com/knowhow/10 -X GET
+              </code></pre>
+
+              <br>
+        
+            </div><!-- view -->
+            <div class="footer">
+            <p>&copy; iworld designer 2013</p>
+            </div>
+         </div> <!-- containert -->
+      </div> <!-- contents -->
+    </div> <!-- whole -->
+    <script type="text/javascript" src="/js/homenotes.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

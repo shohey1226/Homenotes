@@ -95,7 +95,7 @@ sub get_login_button {
 }
 
 sub get_modal_button {
-    my $html = '<div id="share_button">';
+    my $html = '<div class="buttons">';
     $html .= '<a id="central_share_button" href="#myModal" role="button" class="btn btn-large btn-success" data-toggle="modal">Share your knowhow!</a>';
     $html .= '</div>';
     return $html;
@@ -243,92 +243,104 @@ sub search {
     }
 }
 
-sub get_knowhow_api {
+sub get_knowhow {
     my ($self, $id) = @_;
     my $mem = $self->mem;
-    my $response = $mem->get("knowhowapi/$id");
-    return $response if (defined $response);
+    if (defined $mem) {
+        my $response = $mem->get("knowhow/$id");
+        return $response if (defined $response);
+    }
     my $res = {};
     my $db = $self->db;
     my $row = $db->single('Knowhow', {record_id => $id} );
     $res->{know} = decode_utf8($row->get_column('know'));
     $res->{how} = decode_utf8($row->get_column('how'));
     $res->{example} = decode_utf8($row->get_column('example'));
-    $mem->add("knowhowapi/$id", $res, 60 * 60 * 24 * 7);
+    $res->{user_id} = decode_utf8($row->get_column('user_id'));
+    $res->{knowhow_id} = decode_utf8($row->get_column('record_id'));
+    $mem->add("knowhow/$id", $res, 60 * 60 * 24 * 7) if(defined $mem);
     return $res;
 }
-    
 
-sub get_knowhow {
-    my ($self, $id, $logged_in_user_id) = @_; 
-
-    # use memcache
-    my $mem = $self->mem;
-    my $uid;
-    if (defined $logged_in_user_id){
-        $uid = $logged_in_user_id;
-    }else {
-        $uid = "";
-    }
-    my $response = $mem->get("knowhow/$id/$uid");
-    #print Dumper $response;
-    return $response if (defined $response);
-
-    my $res = {};
+sub whose_knowhow {
+    my ($self, $id, $logged_in_user_id) = @_;
     my $db = $self->db;
-
-    my $row = $db->single('Knowhow', {record_id => $id} );
-    $res->{know} = decode_utf8($row->get_column('know'));
-    $res->{title} = decode_utf8($row->get_column('know'));
-    $res->{how} = decode_utf8($row->get_column('how'));
-    $res->{example} = decode_utf8($row->get_column('example'));
-    my $user_id = $row->get_column('user_id');
-
-    for my $key (keys %{ $res }){
-        $res->{$key} =~ s/&/&amp;/go;
-        $res->{$key} =~ s/</&lt;/go;
-        $res->{$key} =~ s/>/&gt;/go;
-        $res->{$key} =~ s/"/&quot;/go;
-        $res->{$key} =~ s/'/&#39;/go;
-        $res->{$key} =~ s/(http:\/\/\S+)/<a href="$1">$1<\/a>/go;
-    }
-
-    # Change tag to url
-    my @tags = $res->{know} =~ /#[0-9a-zA-Z_\-]+/g;
-    for my $tag (@tags){
-        $tag = lc $tag;
-        my $r = $db->single('Tag', {tag_name => $tag});
-        if (defined $r) {
-            my $tag_url = '<a class="taglink" href="/tags/' . $r->get_column('tag_id') . '">' . $tag . '</a>';
-            $res->{know} =~ s/$tag/$tag_url/g;
-        }
-    }
-    #show buttons 
-    #if the user logged in is the same as the user who added the knowhow 
-    
-    # If usr is being logged in
-    if (defined $logged_in_user_id) {
-        if( $logged_in_user_id eq $user_id){
-            $res->{button} = '<br><button id="delete" class="btn btn-danger" value="' . $id . '">Delete this knowhow</button><br><br>'; 
-        }else {
-            # if it's in MyKnowhow, show remove this from my knowhow    
-            my $r = $db->single('MyKnowhow', {user_id => $logged_in_user_id, knowhow_record_id => $id });
-            if (defined $r) {
-                $res->{button} = '<br><button id="remove_knowhow" class="btn btn-warning" value="' . $id . '">Remove this from my knowhow</button><br><br>';
-            # otheriwse, show add this to my knowow 
-            }else {
-                $res->{button} = '<br><button id="add_knowhow" class="btn btn-success" value="' . $id . '">Add this to my knowhow</button><br><br>';
-            }
-        }
-    }else {
-        $res->{button} = ''; 
-    }
-
-    $row = $db->single('User', {user_id => $user_id });
-    $res->{username} = $row->get_column('screen_name');
-    $mem->add("knowhow/$id/$uid", $res, 60 * 60 * 24 * 7);
-    return $res;
+    my $row = $db->single('Knowhow', {user_id => $logged_in_user_id, record_id => $id } );
+    return "mine" if (defined $row);
+    my $r = $db->single('MyKnowhow', {user_id => $logged_in_user_id, knowhow_record_id => $id });
+    return defined $r ? 'added' : 'others';
 }
+
+#sub get_knowhow {
+#    my ($self, $id, $logged_in_user_id) = @_; 
+#
+#    # use memcache
+#    my $mem = $self->mem;
+#    my $uid;
+#    if (defined $logged_in_user_id){
+#        $uid = $logged_in_user_id;
+#    }else {
+#        $uid = "";
+#    }
+#    my $response = $mem->get("knowhow/$id/$uid");
+#    #print Dumper $response;
+#    return $response if (defined $response);
+#
+#    my $res = {};
+#    my $db = $self->db;
+#
+#    my $row = $db->single('Knowhow', {record_id => $id} );
+#    $res->{know} = decode_utf8($row->get_column('know'));
+#    $res->{title} = decode_utf8($row->get_column('know'));
+#    $res->{how} = decode_utf8($row->get_column('how'));
+#    $res->{example} = decode_utf8($row->get_column('example'));
+#    my $user_id = $row->get_column('user_id');
+#
+#    for my $key (keys %{ $res }){
+#        $res->{$key} =~ s/&/&amp;/go;
+#        $res->{$key} =~ s/</&lt;/go;
+#        $res->{$key} =~ s/>/&gt;/go;
+#        $res->{$key} =~ s/"/&quot;/go;
+#        $res->{$key} =~ s/'/&#39;/go;
+#        $res->{$key} =~ s/(http:\/\/\S+)/<a href="$1">$1<\/a>/go;
+#    }
+#
+#    # Change tag to url
+#    my @tags = $res->{know} =~ /#[0-9a-zA-Z_\-]+/g;
+#    for my $tag (@tags){
+#        $tag = lc $tag;
+#        my $r = $db->single('Tag', {tag_name => $tag});
+#        if (defined $r) {
+#            my $tag_url = '<a class="taglink" href="/tags/' . $r->get_column('tag_id') . '">' . $tag . '</a>';
+#            $res->{know} =~ s/$tag/$tag_url/g;
+#        }
+#    }
+#    #show buttons 
+#    #if the user logged in is the same as the user who added the knowhow 
+#    
+#    # If usr is being logged in
+#    if (defined $logged_in_user_id) {
+#        if( $logged_in_user_id eq $user_id){
+#            $res->{button} = '<br><button id="delete" class="btn btn-danger" value="' . $id . '">Delete this knowhow</button><br><br>'; 
+#        }else {
+#            # if it's in MyKnowhow, show remove this from my knowhow    
+#            my $r = $db->single('MyKnowhow', {user_id => $logged_in_user_id, knowhow_record_id => $id });
+#            if (defined $r) {
+#                $res->{button} = '<br><button id="remove_knowhow" class="btn btn-warning" value="' . $id . '">Remove this from my knowhow</button><br><br>';
+#            # otheriwse, show add this to my knowow 
+#            }else {
+#                $res->{button} = '<br><button id="add_knowhow" class="btn btn-success" value="' . $id . '">Add this to my knowhow</button><br><br>';
+#            }
+#        }
+#    }else {
+#        $res->{button} = ''; 
+#    }
+#
+#    $row = $db->single('User', {user_id => $user_id });
+#    $res->{username} = $row->get_column('screen_name');
+#    $mem->add("knowhow/$id/$uid", $res, 60 * 60 * 24 * 7);
+#    return $res;
+#}
 
 sub delete_knowhow{
     my ($self, $knowhow_id, $user_id) = @_;
@@ -423,32 +435,6 @@ sub get_knowhow_from_tag {
         return $result;
     }
 } 
-
-sub get_myknowhow_as_xml {
-    my ($self, $user_id) = @_;
-    my $db = $self->db;
-    my @rows = $db->search('MyKnowhow', { user_id => $user_id });
-    my @knowhow_ids;
-    for my $row (@rows) {
-        push @knowhow_ids, $row->get_column('knowhow_record_id');
-    }
-    my @knowhows;
-    my @ro = $db->search('Knowhow', { record_id => \@knowhow_ids } );
-    my $i=0;
-    for my $r (@ro) {
-        my $record_id = $r->get_column('record_id');
-        my $entry;
-        $entry->{id} = $i;
-        $entry->{know} = decode_utf8($r->get_column('know'));
-        $entry->{how} = decode_utf8($r->get_column('how'));
-        $entry->{example} = decode_utf8($r->get_column('example'));
-        push @knowhows, $entry;
-        $i++;
-    }
-    my $xml;
-    $xml = { list => { knowhow => \@knowhows } };
-    return XMLout($xml, NoAttr => 1, keyattr => [], RootName => undef );
-}
 
 sub get_tags {
     my $self = shift;
