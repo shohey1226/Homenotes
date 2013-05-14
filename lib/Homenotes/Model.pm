@@ -1,7 +1,6 @@
 package Homenotes::Model;
 use Moo;
 use LWP::Protocol::Net::Curl;
-use Net::Twitter::Lite;
 use XML::Simple;
 use Data::Dumper;
 use FindBin qw($Bin);
@@ -10,11 +9,6 @@ use Homenotes::DB;
 use utf8;
 use Encode;
 use Cache::Memcached::Fast;
-
-has 'twitter' => (
-    is => 'ro',
-    builder => '_build_twitter',
-); 
 
 has 'config' => (
     is => 'ro',
@@ -54,16 +48,6 @@ sub _build_db {
         password => $self->config->{password}
     });
 }
-
-sub _build_twitter {
-    my $self = shift;
-    my $config = $self->config;
-    return Net::Twitter::Lite->new(
-        consumer_key => $config->{consumer_key},
-        consumer_secret => $config->{consumer_secret},
-        legacy_lists_api => 0,
-    );
-}    
 
 sub get_login_link{
     my $self = shift;
