@@ -20,7 +20,7 @@ img.bg {
   }
 }
 
-a:visited {
+a:visited,a:link {
     color: #040404;
 }
 
@@ -32,9 +32,10 @@ div.whole {
     text-decoration: underline; 
 }
 
-#view .span6 a:visited {
+#view .span8 a:visited {
     color: #000000;
     text-decoration: underline; 
+    font-size: 18px;
 }
 
 #view .span4 a:visited {

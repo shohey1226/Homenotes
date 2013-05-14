@@ -291,7 +291,7 @@
             var result ="";
             var res = this.model.get("result");
             console.log(res);
-            result += '<div class="span3"></div><div class="span6">';
+            result += '<div class="span2"></div><div class="span8">';
             if (res === "" ){
                 result += "<center><h1>No Search Result</h1></center><br><br><br>";
             }else {
@@ -299,7 +299,7 @@
                   result += '<a class="searchresult" href="/knowhow/view/' + i + '" >' + res[i] + '</a><hr>';
                 }
             }
-            result += '</div><div class="span3"></div>';
+            result += '</div><div class="span2"></div>';
             $("#page_info").html('');
             $("#buttons").html('');
             $("#view").html(result);
