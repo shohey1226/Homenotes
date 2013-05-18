@@ -16,7 +16,7 @@ my $query=undef;
 my $know=undef;
 my $how=undef;
 my $example=undef;
-my $url = 'http://127.0.0.1:3000';
+my $url = 'http://homenotes.iworlddesigner.com';
 
 my $options = GetOptions(
     'help' => \$help,
@@ -36,11 +36,14 @@ if (defined $id) {
     my $content = get("$url/knowhow/$id");
     my $ref = decode_json $content; 
     print "KNOW:\n";
+    print "==============\n";
     print $ref->{know}, "\n\n";
     print "HOW:\n";
+    print "==============\n";
     print $ref->{how}, "\n\n";
     print "EXAPLE:\n";
-    print $ref->{example}, "\n";
+    print "==============\n";
+    print $ref->{example}, "\n\n";
 # otherwise, it's query
 }else {
     my $esc_query = uri_escape( $query );
@@ -63,8 +66,9 @@ notes - Get knowhow $HOME/notes
 
 =head1 SYNOPSIS
 
-    # Get indices of search
-    $ notes -query <key> 
+    # Get indices of search in know
+    $ notes -query <key>  
+    $ notes -query <key> -how # search in know and how
     
     # Get content of knowhow by the index
     $ notes -id <id> 
@@ -72,9 +76,9 @@ notes - Get knowhow $HOME/notes
  Options:
    -help            brief help message
    -query           search query
-   -know            search in know
-   -how             search in how
-   -example         seach in example
+   -know            flag to search in know(on by default)
+   -how             flag to search in how
+   -example         flag to seach in example
    -id              knowhow index which you can obtain the query 
 
 =head1 OPTIONS
