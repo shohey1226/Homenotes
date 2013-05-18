@@ -8,6 +8,8 @@ use Getopt::Long;
 use Pod::Usage;
 use URI::Escape;
 use JSON;
+use utf8;
+binmode(STDOUT, ":utf8");
 
 # variables
 my $help=undef;;
