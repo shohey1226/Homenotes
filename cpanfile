@@ -9,3 +9,4 @@ requires 'YAML', 0.84;
 requires 'XML::Simple', 2.20;
 requires 'Cache::Memcached::Fast', 0.19;
 requires 'Mojolicious::Plugin::Web::Auth', 0.02;
+requires 'IO::Socket::SSL', 1.89;
