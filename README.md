@@ -13,15 +13,16 @@ See - http://homenotes.iworlddesigner.com
 * mroonga(http://mroonga.org) as fulltext search engine
 
 ## How to build $HOME/notes
-0 Install prerequisite
+
+### 0.Install prerequisite
 
  - install MySQL
  - install mroonga
  - Carton (Perl module)
 
-1 git clone & carton install 
+### 1. git clone & carton install 
 
-2 Create databse
+### 2. Create databse
 
 DB: knowhow3
 id: xx
@@ -33,7 +34,10 @@ pass: yyy
     $ mysql -uxx -p -D knowhow3 < ./script/db_schema.sql
     $ vi ./etc/homenotes.conf
     
-3 Start WebUI
+### 3. Start WebUI
     
     $ ./script/start_homenotes
 
+## License
+
+MIT License
