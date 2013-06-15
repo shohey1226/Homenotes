@@ -179,6 +179,7 @@
         render: function(){
             console.log(this.model.toJSON());
             var html = this.template(this.model.toJSON());
+            document.title = this.model.get('know') + " - $Home/notes";
             $('#view').html(html);
         }
     });
